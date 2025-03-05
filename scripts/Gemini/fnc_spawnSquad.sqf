@@ -172,15 +172,77 @@
 // =================================================================================================
 // SETTING SQUAD TASK
 // =================================================================================================
+private _owner = groupOwner _squad;
 
-	if ((_mission == "attack") && (_type == "infantry")) then {[_squad, _destination] call BIS_fnc_taskAttack; leader _squad setSpeedMode (selectRandom ["limited", "normal", "full"]); leader _squad setCombatMode "red"; leader _squad setFormation (selectRandom ["WEDGE", "VEE", "LINE", "DIAMOND", "ECH LEFT", "ECH RIGHT"])};
-	if ((_mission == "attack") && (_type != "infantry")) then {[_squad, _destination] call BIS_fnc_taskAttack; leader _squad setSpeedMode (selectRandom ["limited", "normal"]); leader _squad setCombatMode "red"; leader _squad setFormation "COLUMN"; {_x setBehaviour "safe"} forEach units _squad};
-	if (_mission == "patrol") then {[_squad, _destination, _radius] spawn Gemini_fnc_doPatrol};
-	if (_mission == "hold") then {[_squad, _radius, _destination] call Gemini_fnc_doHold};
-	if (_mission == "talk") then {[_squad, _center, _radius] call Gemini_fnc_doTalk};
-	if (_mission == "wait") then {[_squad, _center, _radius, _destination] call Gemini_fnc_doWait};
+if ((_mission == "attack") && (_type == "infantry")) then {
+    if (local _squad) then {
+        [_squad, _destination] call BIS_fnc_taskAttack;
+        leader _squad setSpeedMode (selectRandom ["limited", "normal", "full"]);
+        leader _squad setCombatMode "red";
+        leader _squad setFormation (selectRandom ["WEDGE", "VEE", "LINE", "DIAMOND", "ECH LEFT", "ECH RIGHT"]);
+    } else {
+        [_squad, _destination] remoteExecCall ["BIS_fnc_taskAttack", _owner];
+        [_squad, selectRandom ["limited", "normal", "full"]] remoteExecCall ["setSpeedMode", _owner];
+        [_squad, "red"] remoteExecCall ["setCombatMode", _owner];
+        [_squad, selectRandom ["WEDGE", "VEE", "LINE", "DIAMOND", "ECH LEFT", "ECH RIGHT"]] remoteExecCall ["setFormation", _owner];
+    };
+};
 
-	{_x enableSimulationGlobal true} forEach units _squad;
+if ((_mission == "attack") && (_type != "infantry")) then {
+    if (local _squad) then {
+        [_squad, _destination] call BIS_fnc_taskAttack;
+        leader _squad setSpeedMode (selectRandom ["limited", "normal"]);
+        leader _squad setCombatMode "red";
+        leader _squad setFormation "COLUMN";
+        {_x setBehaviour "safe"} forEach units _squad;
+    } else {
+        [_squad, _destination] remoteExecCall ["BIS_fnc_taskAttack", _owner];
+        [_squad, selectRandom ["limited", "normal"]] remoteExecCall ["setSpeedMode", _owner];
+        [_squad, "red"] remoteExecCall ["setCombatMode", _owner];
+        [_squad, "COLUMN"] remoteExecCall ["setFormation", _owner];
+        [[_squad], {
+            params ["_group"];
+            {_x setBehaviour "safe"} forEach units _group;
+        }] remoteExecCall ["call", _owner];
+    };
+};
+
+if (_mission == "patrol") then {
+    if (local _squad) then {
+        [_squad, _destination, _radius] spawn Gemini_fnc_doPatrol;
+    } else {
+        [_squad, _destination, _radius] remoteExecCall ["Gemini_fnc_doPatrol", _owner];
+    };
+};
+
+if (_mission == "hold") then {
+    if (local _squad) then {
+        [_squad, _radius, _destination] call Gemini_fnc_doHold;
+    } else {
+        [_squad, _radius, _destination] remoteExecCall ["Gemini_fnc_doHold", _owner];
+    };
+};
+
+if (_mission == "talk") then {
+    if (local _squad) then {
+        [_squad, _center, _radius] call Gemini_fnc_doTalk;
+    } else {
+        [_squad, _center, _radius] remoteExecCall ["Gemini_fnc_doTalk", _owner];
+    };
+};
+
+if (_mission == "wait") then {
+    if (local _squad) then {
+        [_squad, _center, _radius, _destination] call Gemini_fnc_doWait;
+    } else {
+        [_squad, _center, _radius, _destination] remoteExecCall ["Gemini_fnc_doWait", _owner];
+    };
+};
+
+// Activer la simulation pour toutes les unités
+{
+    _x enableSimulationGlobal true;
+} forEach units _squad;
 
 // =========================================================================================================
 // RETURNING SPAWNED SQUAD

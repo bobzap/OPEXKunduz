@@ -12,18 +12,18 @@
 /// ---------------------------------------------------------------
 
 	// INITIALIZING TASK STATE
-	OPEX_assignedTask = false; publicVariable "OPEX_assignedTask";
-	OPEX_task = nil; publicVariable "OPEX_task";
-	OPEX_taskID = ""; publicVariable "OPEX_taskID";
-	OPEX_taskDescription = []; publicVariable "OPEX_taskDescription";
+OPEX_assignedTask = false; publicVariable "OPEX_assignedTask";
+OPEX_task = nil; publicVariable "OPEX_task";
+OPEX_taskID = ""; publicVariable "OPEX_taskID";
+OPEX_taskDescription = []; publicVariable "OPEX_taskDescription";
 
 	// INITIALIZING PLAYING PLAYERS (PLAYERS OUTSIDE SAFE AREAS)
-	OPEX_playingPlayers = []; publicVariable "OPEX_playingPlayers";
+OPEX_playingPlayers = []; publicVariable "OPEX_playingPlayers";
 
 	// INITIALIZING ENTITIES & MARKERS COUNT
-	OPEX_entities = [[], [], [], []]; publicVariable "OPEX_entities";
-	OPEX_markers = [[], [], [], []]; publicVariable "OPEX_markers";
-	OPEX_logics = allUnits select {side _x == sideLogic}; publicVariable "OPEX_logics";
+OPEX_entities = [[], [], [], []]; publicVariable "OPEX_entities";
+OPEX_markers = [[], [], [], []]; publicVariable "OPEX_markers";
+OPEX_logics = allUnits select {side _x == sideLogic}; publicVariable "OPEX_logics";
 
 	// CREATING TASK MARKERS
 	_taskMarker_A = createMarker ["taskMarker_A", [0,0,0]]; _taskMarker_A setMarkerType "empty";

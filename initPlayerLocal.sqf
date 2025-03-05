@@ -146,7 +146,14 @@
 // STARTING INTRO
 // =========================================================================================================
 
-	if (OPEX_intro) then {OPEX_introFinished = false} else {OPEX_introFinished = true; 0 cutText ["", "black out", 10e10]};
+	if (OPEX_intro) then {
+    OPEX_introFinished = false;
+    publicVariable "OPEX_introFinished";
+} else {
+    OPEX_introFinished = true;
+    publicVariable "OPEX_introFinished";
+    0 cutText ["", "black out", 10e10];
+};
 	execVM "scripts\Gemini\sqf_intro.sqf";
 	waitUntil {!isNil "OPEX_introFinished"}; waitUntil {OPEX_introFinished};
 	//waitUntil {!isNil "OPEX_params_ready"}; waitUntil {OPEX_params_ready};

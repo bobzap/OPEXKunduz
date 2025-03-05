@@ -108,6 +108,7 @@ sleep 5;
 0 fadeMusic 0.5;
 player allowDamage true;
 OPEX_introFinished = true;
+publicVariable "OPEX_introFinished";
 sleep 5;
 call Gemini_fnc_sitrep;
 sleep 10;

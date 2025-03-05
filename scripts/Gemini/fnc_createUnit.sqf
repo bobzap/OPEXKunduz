@@ -141,7 +141,10 @@
 	if (_unitSide == OPEX_enemy_side1) then
 		{
 			// COUNTING KILLED UNITS
-			_unit addEventHandler ["killed", "['enemyKilled', _this] call Gemini_fnc_updateStats"];
+			_unit addEventHandler ["killed", {
+    params ["_unit", "_killer"];
+    ['enemyKilled', [_unit, _killer]] call Gemini_fnc_updateStats;
+}];
 			//_unit addEventHandler ["hit", "if (side (_this select 1) == OPEX_friendly_side1) then {['enemyHit', _this] call Gemini_fnc_updateStats}"];
 			//_unit addEventHandler ["hit", "['enemyHit', _this] call Gemini_fnc_updateStats"];
 

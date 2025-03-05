@@ -13,10 +13,21 @@
 // SETTING DEV VARIABLES
 // =========================================================================================================
 
-	OPEX_version = "2.061";
+	/*OPEX_version = "2.061";
 	OPEX_debug = false; // [bool] true (if yes) or false (if no) - default: false
 	OPEX_intro = true; // [bool] true (if yes) or false (if no) - default: true
 	OPEX_updateNotice = [false, parseNumber OPEX_version]; // [bool, number] true if a notice must be displayed once a new update is released
+*/
+
+OPEX_version = "2.061";
+publicVariable "OPEX_version";
+OPEX_debug = false;
+publicVariable "OPEX_debug";
+OPEX_intro = true;
+publicVariable "OPEX_intro";
+OPEX_updateNotice = [false, parseNumber OPEX_version];
+publicVariable "OPEX_updateNotice";
+
 
 // =========================================================================================================
 // INITIALIZING MISSION
@@ -24,6 +35,7 @@
 
 	// GETTING MISSION PATH
 	OPEX_missionPath = [str missionConfigFile, 0, -15] call BIS_fnc_trimString;
+publicVariable "OPEX_missionPath";
 
 	// GETTING UNITS/WEAPONS/VEHICLES/MODS ETC...
 	call compile preProcessFileLineNumbers "settings\init.sqf";
@@ -32,8 +44,10 @@
 	[] spawn
 		{
 			sleep 3;
-			OPEX_allLocations = OPEX_locations_safe + OPEX_locations_isolated + OPEX_locations_villages + OPEX_locations_cities + OPEX_locations_industrial + OPEX_locations_military;
-			OPEX_validLocations = OPEX_locations_isolated + OPEX_locations_villages + OPEX_locations_cities + OPEX_locations_industrial + OPEX_locations_military;
+OPEX_allLocations = OPEX_locations_safe + OPEX_locations_isolated + OPEX_locations_villages + OPEX_locations_cities + OPEX_locations_industrial + OPEX_locations_military;
+publicVariable "OPEX_allLocations";
+OPEX_validLocations = OPEX_locations_isolated + OPEX_locations_villages + OPEX_locations_cities + OPEX_locations_industrial + OPEX_locations_military;
+publicVariable "OPEX_validLocations";
 			for "_i" from 0 to (count OPEX_locations_safe) do {{if ((position _x) inArea (OPEX_locations_safe select _i)) then {OPEX_validLocations = OPEX_validLocations - [_x]}} forEach (OPEX_locations_isolated + OPEX_locations_villages + OPEX_locations_cities + OPEX_locations_industrial + OPEX_locations_military)};
 		};
 

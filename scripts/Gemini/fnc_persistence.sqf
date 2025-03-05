@@ -5,16 +5,17 @@
 	Gemini_fnc_persistence_save =
 		{
 			waitUntil {!isNil "OPEX_params_ready"};
-			if (_this == "server") then
-				{
-					if (!isServer) exitWith {};
-					call Gemini_fnc_persistence_getCommonData;
-					call Gemini_fnc_persistence_getVehiclesData;
-					call Gemini_fnc_persistence_getCratesData;
-					profileNamespace setVariable ["OPEX_" + worldName + "_persistentData_server", OPEX_persistentData_server];
-					profileNamespace setVariable ["OPEX_persistentStats_server", OPEX_stats_faction];
-					saveProfileNamespace;
-				};
+			if (_this == "server") then {
+    if (!isServer) exitWith {};
+    call Gemini_fnc_persistence_getCommonData;
+    call Gemini_fnc_persistence_getVehiclesData;
+    call Gemini_fnc_persistence_getCratesData;
+    profileNamespace setVariable ["OPEX_" + worldName + "_persistentData_server", OPEX_persistentData_server];
+    profileNamespace setVariable ["OPEX_persistentStats_server", OPEX_stats_faction];
+    saveProfileNamespace;
+    // S'assurer que le message est envoyé à tous les clients
+    ["hint","STR_hint_dataSaved"] remoteExec ["Gemini_fnc_globalHint", 0];
+};
 			if (_this == "client") then
 				{
 					if (!hasInterface) exitWith {};
@@ -37,7 +38,12 @@
 					profileNamespace setVariable ["OPEX_persistentStats_server", nil];
 					profileNamespace setVariable ["OPEX_persistentStats_player", nil];
 				};
-			if (_this == "server") then {profileNamespace setVariable [("OPEX_" + worldName + "_persistentData_server"), nil]; profileNamespace setVariable ["OPEX_persistentStats_server", nil]; ["hint","STR_hint_missionReset"] remoteExec ["Gemini_fnc_globalHint"]};
+			if (_this == "server") then {
+    profileNamespace setVariable [("OPEX_" + worldName + "_persistentData_server"), nil]; 
+    profileNamespace setVariable ["OPEX_persistentStats_server", nil]; 
+    // Informer tous les clients
+    ["hint","STR_hint_missionReset"] remoteExec ["Gemini_fnc_globalHint", 0];
+};
 			if (_this == "client") then {profileNamespace setVariable ["OPEX_" + worldName + "_persistentData_player", nil]; profileNamespace setVariable ["OPEX_persistentStats_player", nil]; hint localize "STR_hint_playerReset"};
 			saveProfileNamespace;
 			if ((_this == "all") || (_this == "server")) then {if (isMultiplayer) then {"missionResetted" call BIS_fnc_endMissionServer} else {["missionResetted", true, true] call BIS_fnc_endMission}};

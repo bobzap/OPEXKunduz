@@ -11,6 +11,9 @@
 	waitUntil {!isNil "OPEX_friendly_identities"};
 	if (count OPEX_friendly_identities == 0) exitWith {};
 
+	if (!local _unit) exitWith {
+    [_unit] remoteExec ["Gemini_fnc_setIdentity", _unit]; };
+
 // =========================================================================================================
 // SETTING UNIT'S IDENTITY
 // =========================================================================================================

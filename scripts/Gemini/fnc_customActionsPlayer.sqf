@@ -10,7 +10,7 @@ private _green 	= 	"<t color='#00A903'>";
 [OPEX_debug] call Gemini_fnc_debug;
 
 // SAVING ACTIONS
-_unit setVariable ["customActionsReady",true];
+_unit setVariable ["customActionsReady", true, true]; 
 
 // WEAPON ON BACK/HAND
 if (!(isClass (configFile >> "CfgPatches" >> "ace_common"))) then
